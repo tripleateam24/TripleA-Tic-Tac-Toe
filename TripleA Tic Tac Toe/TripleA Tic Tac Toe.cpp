@@ -1,5 +1,9 @@
 // TripleA Tic Tac Toe.cpp : This file contains the 'main' function. Program execution begins and ends there.
 
+//needs random turn function 
+//replay(w win counter)/exit game 
+//user input check
+
 #include <iostream>
 #include <stdlib.h>
 using namespace std;
@@ -57,7 +61,7 @@ void player_turn()
         player_turnchar = 'X';
     }
     else {
-        cout << "Box already filled!n Please choose another!!nn";
+        cout << "Box already filled! Please choose another!!";
         player_turn();//iand f input position already filled throws error message and restarts turn
     }
     display_ui(); //displaying board at end of turn for next turn
@@ -85,10 +89,23 @@ bool gameover() {
 int main()
 {
     cout << "TIC TAC TOE GAME FOR 2 PLAYERS\n";
-
-
-    //just need a while or for loop for the objects to run through, then some if statements to check if a win/draw happened then a text prompt for a win or draw
+    cout << "Choose the number that corresponds to the position you want\n";
+    display_ui();
+    while (gameover()) { //game running through
+        player_turn();
+        gameover();
+    }
+    if (player_turnchar == 'X' && draw == false) {
+        cout << "CONGRATULATIONS!! PLAYER O HAS WON THE GAME";
+    }
+    else if (player_turnchar == 'O' && draw == false) {
+        cout << "CONGRATULATIONS!! PLAYER X HAS WON THE GAME";
+    }
+    else
+        cout << "GAME IS A DRAW!!!";
 }
+    //just need a while or for loop for the objects to run through, then some if statements to check if a win/draw happened then a text prompt for a win or draw
+
 
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
