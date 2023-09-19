@@ -8,7 +8,7 @@
 #include <stdlib.h>
 using namespace std;
 char board[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
-int choice, row, column; //for keeping track of i/o
+int choice, row, column, playerX_wins=0, playerO_wins=0; //for keeping track of i/o
 char player_turnchar = 'X'; //keeping track of who's turn it is in the game. (im pretty sure we technically could make this into a bool, but im not sure exactly what id need to change from here to make that work)
 bool draw = false; //choice for if game is draw
 
@@ -68,11 +68,29 @@ void player_turn()
         }
         display_ui(); //displaying board at end of turn for next turn
     }
+
     else
     {
         cout << "Please enter a number between 1 and 9" << endl;
-        cin >> choice;
+        player_turn();
     }
+}
+
+void resetGame()
+{
+    // Reset the board and other game-related variables
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            board[i][j] = '1' + i * 3 + j;
+        }
+    }
+    draw = false;
+    player_turnchar = 'X'; //maybe this should be where we put the random number calc that way it wont get in the way of every player turn
+}
+
+void win_counter(int playerOneScore, int playerTwoScore)
+{
+    cout << "\nPlayer O:" + playerOneScore << " Player X: " << playerTwoScore << endl;
 }
 
 bool gameover() {
@@ -93,23 +111,49 @@ bool gameover() {
     return false;
 }
 
+bool continueGame()
+{
+    cout << "\nDo you want to play again? (Y/N): ";
+    char playAgain;
+    cin >> playAgain;
+    return (playAgain == 'Y' || playAgain == 'y');
+}
+
 int main()
 {
     cout << "TIC TAC TOE GAME FOR TWO PLAYERS\n";
     cout << "Choose the number that corresponds to the position you want\n";
-    display_ui();
-    while (gameover()) { //game running through
-        player_turn();
-        gameover();
-    }
-    if (player_turnchar == 'X' && draw == false) {
-        cout << "CONGRATULATIONS!! PLAYER O HAS WON THE GAME";
-    }
-    else if (player_turnchar == 'O' && draw == false) {
-        cout << "CONGRATULATIONS!! PLAYER X HAS WON THE GAME";
-    }
-    else
-        cout << "GAME IS A DRAW!!!";
+ 
+
+    do 
+    {
+        display_ui();
+        while (gameover()) { //game running through
+            player_turn();
+            gameover();
+        }
+        if (player_turnchar == 'X' && draw == false) {
+            cout << "CONGRATULATIONS!! PLAYER O HAS WON THE GAME";
+            resetGame();
+            playerO_wins++;
+
+        }
+        else if (player_turnchar == 'O' && draw == false) {
+            cout << "CONGRATULATIONS!! PLAYER X HAS WON THE GAME";
+            resetGame();
+            playerX_wins++;
+        }
+        else
+            cout << "GAME IS A DRAW!!!";
+
+        win_counter(playerO_wins, playerX_wins);
+
+        if (!continueGame()) {
+            cout << "Thank you for playing! Goodbye." << endl;
+            break;  // Exit the loop and end the program
+        }
+    } while (true);
+        return 0;
 }
     //just need a while or for loop for the objects to run through, then some if statements to check if a win/draw happened then a text prompt for a win or draw
 
