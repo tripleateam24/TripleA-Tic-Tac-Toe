@@ -88,7 +88,7 @@ bool gameover() {
 
 int main()
 {
-    cout << "TIC TAC TOE GAME FOR 2 PLAYERS\n";
+    cout << "TIC TAC TOE GAME FOR TWO PLAYERS\n";
     cout << "Choose the number that corresponds to the position you want\n";
     display_ui();
     while (gameover()) { //game running through
