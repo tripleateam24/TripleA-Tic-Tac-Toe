@@ -38,34 +38,41 @@ void player_turn()
     else if (player_turnchar == 'O')
         cout << "Player 2 [O] turn : ";
     cin >> choice; //geting the placement input from user
-    switch (choice) { //switch case to get which row and column will be update (9 places for a move 9 cases)
-    case 1: row = 0; column = 0; break;
-    case 2: row = 0; column = 1; break;
-    case 3: row = 0; column = 2; break;
-    case 4: row = 1; column = 0; break;
-    case 5: row = 1; column = 1; break;
-    case 6: row = 1; column = 2; break;
-    case 7: row = 2; column = 0; break;
-    case 8: row = 2; column = 1; break;
-    case 9: row = 2; column = 2; break;
-    default:
-        cout << "Invalid Move";
+    if (choice <= 9 && choice >= 1)
+    {
+        switch (choice) { //switch case to get which row and column will be update (9 places for a move 9 cases)
+        case 1: row = 0; column = 0; break;
+        case 2: row = 0; column = 1; break;
+        case 3: row = 0; column = 2; break;
+        case 4: row = 1; column = 0; break;
+        case 5: row = 1; column = 1; break;
+        case 6: row = 1; column = 2; break;
+        case 7: row = 2; column = 0; break;
+        case 8: row = 2; column = 1; break;
+        case 9: row = 2; column = 2; break;
+        default:
+            cout << "Invalid Move";
+        }
+        if (player_turnchar == 'X' && board[row][column] != 'X' && board[row][column] != 'O') {
+            //making sure to check that there is an open space and it is the correct players turn
+            board[row][column] = 'X'; // putting the correct player's move into the spot selected on the board
+            player_turnchar = 'O'; //switching the move to the other player
+        }
+        else if (player_turnchar == 'O' && board[row][column] != 'X' && board[row][column] != 'O') {
+            board[row][column] = 'O'; //repeating the process from above
+            player_turnchar = 'X';
+        }
+        else {
+            cout << "Box already filled! Please choose another!!";
+            player_turn();//iand f input position already filled throws error message and restarts turn
+        }
+        display_ui(); //displaying board at end of turn for next turn
     }
-    if (player_turnchar == 'X' && board[row][column] != 'X' && board[row][column] != 'O') {
-        //making sure to check that there is an open space and it is the correct players turn
-        board[row][column] = 'X'; // putting the correct player's move into the spot selected on the board
-        player_turnchar = 'O'; //switching the move to the other player
+    else
+    {
+        cout << "Please enter a number between 1 and 9" << endl;
+        cin >> choice;
     }
-    else if (player_turnchar == 'O' && board[row][column] != 'X' && board[row][column] != 'O') {
-        board[row][column] = 'O'; //repeating the process from above
-        player_turnchar = 'X';
-    }
-    else {
-        cout << "Box already filled! Please choose another!!";
-        player_turn();//iand f input position already filled throws error message and restarts turn
-    }
-    display_ui(); //displaying board at end of turn for next turn
-
 }
 
 bool gameover() {
