@@ -11,6 +11,7 @@ char board[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
 int choice, row, column, playerX_wins=0, playerO_wins=0; //for keeping track of i/o
 char player_turnchar = 'X'; //keeping track of who's turn it is in the game. (im pretty sure we technically could make this into a bool, but im not sure exactly what id need to change from here to make that work)
 bool draw = false; //choice for if game is draw
+int randomizer_value = rand() % 2 + 1;
 
 
 void display_ui() {
@@ -85,7 +86,14 @@ void resetGame()
         }
     }
     draw = false;
-    player_turnchar = 'X'; //maybe this should be where we put the random number calc that way it wont get in the way of every player turn
+    if (randomizer_value == 1)
+    {
+        player_turnchar = 'X';
+    }
+    else if(randomizer_value == 1)
+    {
+        player_turnchar = 'O';
+    }
 }
 
 void win_counter(int playerOneScore, int playerTwoScore)
@@ -93,8 +101,8 @@ void win_counter(int playerOneScore, int playerTwoScore)
     cout << "\nPlayer O:" + playerOneScore << " Player X: " << playerTwoScore << endl;
 }
 
-bool gameover() {
-
+bool gameover() 
+{
     for (int i = 0; i < 3; i++)
         if (board[i][0] == board[i][1] && board[i][0] == board[i][2] || board[0][i] == board[1][i] && board[0][i] == board[2][i])
             return false; //this is a very simple way of checking for a win through col and row
@@ -123,11 +131,10 @@ int main()
 {
     cout << "TIC TAC TOE GAME FOR TWO PLAYERS\n";
     cout << "Choose the number that corresponds to the position you want\n";
- 
-
     do 
     {
         display_ui();
+        resetGame();
         while (gameover()) { //game running through
             player_turn();
             gameover();
@@ -155,7 +162,6 @@ int main()
     } while (true);
         return 0;
 }
-    //just need a while or for loop for the objects to run through, then some if statements to check if a win/draw happened then a text prompt for a win or draw
 
 
 
