@@ -5,9 +5,12 @@
 //user input check
 
 #include <iostream>
+#include <string>
 #include <stdlib.h>
+#include <sstream>
 using namespace std;
 char board[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
+
 int choice, row, column, playerX_wins=0, playerO_wins=0; //for keeping track of i/o
 char player_turnchar = 'X'; //keeping track of who's turn it is in the game. (im pretty sure we technically could make this into a bool, but im not sure exactly what id need to change from here to make that work)
 bool draw = false; //choice for if game is draw
@@ -32,13 +35,29 @@ void display_ui() {
 
 //Function to get the player input and update the board
 
+bool isint(string str) // Input check for an int value
+{
+    for (int i = 0; i < str.length(); i++)
+        if (!isdigit(str[i]))
+            return false;
+    return true;
+}
+
+
 void player_turn()
 {
+    string choice_holder;
     if (player_turnchar == 'X')
         cout << "Player 1 [X] turn : ";
     else if (player_turnchar == 'O')
         cout << "Player 2 [O] turn : ";
-    cin >> choice; //geting the placement input from user
+    getline(cin, choice_holder); //geting the placement input from user
+    if (!isint(choice_holder)) {
+        player_turn();
+        cout << "Please enter a valid number";
+    }
+    stringstream(choice_holder) >> choice;
+    
     if (choice <= 9 && choice >= 1)
     {
         switch (choice) { //switch case to get which row and column will be update (9 places for a move 9 cases)
@@ -67,12 +86,17 @@ void player_turn()
             cout << "Box already filled! Please choose another!!";
             player_turn();//iand f input position already filled throws error message and restarts turn
         }
+
         display_ui(); //displaying board at end of turn for next turn
+    }
+    else if (choice == 10)
+    {
+        exit(0);
     }
 
     else
     {
-        cout << "Please enter a number between 1 and 9" << endl;
+        cout << "\nPlease enter a number between 1 and 10" << endl;
         player_turn();
     }
 }
@@ -98,7 +122,7 @@ void resetGame()
 
 void win_counter(int playerOneScore, int playerTwoScore)
 {
-    cout << "\nPlayer O:" + playerOneScore << " Player X: " << playerTwoScore << endl;
+    cout << "\nPlayer O:"  << playerOneScore << " Player X: " << playerTwoScore << endl;
 }
 
 bool gameover() 
@@ -124,13 +148,20 @@ bool continueGame()
     cout << "\nDo you want to play again? (Y/N): ";
     char playAgain;
     cin >> playAgain;
+    choice = 0;
     return (playAgain == 'Y' || playAgain == 'y');
 }
 
 int main()
 {
     cout << "TIC TAC TOE GAME FOR TWO PLAYERS\n";
-    cout << "Choose the number that corresponds to the position you want\n";
+    cout << "How to play: \n";
+    cout << "1. The player to go first is choosen at random.\n";
+    cout << "2. Choose the number that corresponds to the position you want your move to be.\n";
+    cout << "3. The first player to get 3 of their marks in a row up, down, across, or diagonally is the winner.\n";
+    cout << "4. To exit the game enter your choice as 10.\n";
+
+
     do 
     {
         display_ui();
