@@ -8,9 +8,11 @@
 #include <string>
 #include <stdlib.h>
 #include <sstream>
+#include <cstring>
+
 using namespace std;
 char board[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
-
+string choice_holder;
 int choice, row, column, playerX_wins=0, playerO_wins=0; //for keeping track of i/o
 char player_turnchar = 'X'; //keeping track of who's turn it is in the game. (im pretty sure we technically could make this into a bool, but im not sure exactly what id need to change from here to make that work)
 bool draw = false; //choice for if game is draw
@@ -46,18 +48,19 @@ bool isint(string str) // Input check for an int value
 
 void player_turn()
 {
-    string choice_holder;
+    
     if (player_turnchar == 'X')
         cout << "Player 1 [X] turn : ";
     else if (player_turnchar == 'O')
         cout << "Player 2 [O] turn : ";
+
     getline(cin, choice_holder); //geting the placement input from user
     if (!isint(choice_holder)) {
+        cout << "Please enter a valid number\n";
         player_turn();
-        cout << "Please enter a valid number";
     }
     stringstream(choice_holder) >> choice;
-    
+   
     if (choice <= 9 && choice >= 1)
     {
         switch (choice) { //switch case to get which row and column will be update (9 places for a move 9 cases)
@@ -93,6 +96,8 @@ void player_turn()
     {
         exit(0);
     }
+    else if (choice == -1)
+        player_turn();
 
     else
     {
